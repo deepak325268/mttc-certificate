@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <!-- html2canvas library for taking screenshot -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style>
@@ -16,10 +15,7 @@
     .form-container button { background: linear-gradient(135deg, #1a237e, #0d145c); color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; width: 100%; font-weight: bold; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
     
     .cert-container { display: none; width: 900px; background: radial-gradient(circle, #ffffff, #fdfbf5); padding: 50px; border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520, 0 15px 35px rgba(0,0,0,0.2); margin: 20px auto; text-align: center; position: relative; box-sizing: border-box; overflow: hidden; }
-    
-    /* MODIFIED: Logo visibility yahan badhayi gayi hai */
     .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.15; z-index: 1; }
-    
     .content-wrapper { position: relative; z-index: 2; }
     .header-layout { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
     .college-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
@@ -43,13 +39,14 @@
       .cert-container { 
         display: block !important; 
         width: 100% !important; 
-        height: 100vh;
+        height: auto !important;
         margin: 0 !important; 
-        padding: 40px !important;
+        padding: 30px !important;
         border: 15px solid #1a237e !important; 
         box-shadow: none !important;
         -webkit-print-color-adjust: exact; 
         print-color-adjust: exact;
+        page-break-inside: avoid;
       }
     }
   </style>
@@ -127,7 +124,6 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById('certPhoto').src = e.target.result;
-        
         document.getElementById('formDiv').style.display = 'none';
         document.getElementById('certDiv').style.display = 'block';
         document.getElementById('printBtn').style.display = 'inline-block';
