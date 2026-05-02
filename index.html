@@ -16,7 +16,10 @@
     .form-container button { background: linear-gradient(135deg, #1a237e, #0d145c); color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; width: 100%; font-weight: bold; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
     
     .cert-container { display: none; width: 900px; background: radial-gradient(circle, #ffffff, #fdfbf5); padding: 50px; border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520, 0 15px 35px rgba(0,0,0,0.2); margin: 20px auto; text-align: center; position: relative; box-sizing: border-box; overflow: hidden; }
-    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.06; z-index: 1; }
+    
+    /* MODIFIED: Logo visibility yahan badhayi gayi hai */
+    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.15; z-index: 1; }
+    
     .content-wrapper { position: relative; z-index: 2; }
     .header-layout { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
     .college-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
@@ -33,7 +36,6 @@
     
     #printBtn { margin-top: 30px; padding: 15px 30px; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; }
     
-    /* FIX: Yahan se print layout fix kiya gaya hai */
     @media print {
       @page { size: A4 landscape; margin: 0; }
       body { background-color: white; margin: 0; padding: 0; }
