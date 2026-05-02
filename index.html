@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   
   <style>
+    /* ... (Baki saara CSS wahi rahega jo maine pehle diya tha) ... */
     body { font-family: 'Arial', sans-serif; background-color: #d7dce0; text-align: center; margin: 0; padding: 10px; }
     .form-container { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0px 10px 25px rgba(0,0,0,0.15); width: 95%; max-width: 400px; margin: 20px auto; border-top: 6px solid #1a237e; box-sizing: border-box; }
     .form-container h2 { color: #1a237e; margin-bottom: 25px; font-family: 'Cinzel', serif; font-size: 22px; }
@@ -20,9 +21,7 @@
     .college-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
     .cert-maintitle { font-family: 'Cinzel', serif; color: #1a237e; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: 1.5px; }
     .cert-subtitle { font-family: 'Arial', sans-serif; color: #b71c1c; font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #daa520; display: inline-block; padding-bottom: 5px; margin-top: 5px; letter-spacing: 2px; }
-    
-    .student-name { font-family: 'Lora', serif; font-size: 42px; color: #b71c1c; font-style: italic; font-weight: 700; margin: 10px 0; text-decoration: underline; text-decoration-color: #daa520; text-underline-offset: 12px; }
-    
+    .student-name { font-family: 'Lora', serif; font-size: 42px; color: #b71c1c; font-style: italic; font-weight: 700; margin: 10px 0; text-decoration: underline; text-decoration-color: #daa520; text-underline-offset: 6px; }
     .content-text { font-family: 'Lora', serif; font-size: 18px; line-height: 1.9; text-align: justify; margin-top: 40px; color: #333; }
     .photo-box { width: 120px; height: 150px; border: 4px double #1a237e; background-color: #fff; padding: 6px; flex-shrink: 0; box-shadow: 3px 3px 10px rgba(0,0,0,0.15); }
     .photo-box img { width: 100%; height: 100%; object-fit: cover; }
@@ -60,25 +59,31 @@
         <div class="header-text">
           <div class="cert-maintitle">MITHILA TEACHERS' TRAINING COLLEGE</div>
           <div class="cert-subtitle">SCHOOL INTERNSHIP CERTIFICATE</div>
+          <div style="font-size: 16px; font-weight: bold; color: #555;">AT & P.O.: BASUARA, Dist. Madhubani - 847212 (Bihar).</div>
+          <div style="font-size: 13px; margin-top: 5px;">PERMANENTLY RECOGNIZED BY ERC, NCTE, BHUBANESWAR (Govt. of India).</div>
+          <div style="font-size: 13px;">PERMANENTLY AFFILIATED TO L. N. MITHILA UNIVERSITY, DARBHANGA.</div>
+          <div style="font-size: 13px;">D.El.Ed. Programme affiliated to Bihar School Examination Board, Patna.</div>
         </div>
       </div>
       
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 40px; margin-top: 30px;">
         <div style="flex: 1; margin-left: 140px; text-align: center;">
-          <p style="font-size: 18px; margin: 0;">This certificate is proudly presented to</p>
+          <p style="font-size: 18px; margin: 0; font-family: 'Lora', serif; font-style: italic;">This certificate is proudly presented to</p>
           <div class="student-name" id="certName">Student Name</div>
-          <p><strong>Roll No.: <span id="certRoll">Roll</span></strong></p>
+          <p style="font-size: 18px; margin: 0;"><strong>Roll No.: <span id="certRoll">Roll</span></strong></p>
         </div>
         <div class="photo-box"><img id="certPhoto" src=""></div>
       </div>
 
       <div class="content-text">
-        Internship completed at <strong id="certSchool">School Name</strong>.
+        who is a student of the <strong>D.El.Ed. programme for the Session 2024-26</strong> and has successfully completed a 120-day School Internship Programme at <strong id="certSchool">School Name</strong> from <strong>December 2025 to April 2026</strong>. During the internship period, the student demonstrated strong dedication and actively contributed to various school activities. Furthermore, the student's behavior and overall performance were found to be highly satisfactory.
       </div>
+      
+      <p style="margin-top: 40px; font-size: 20px; font-weight: bold; color: #1a237e;">We wish the student continued success in all future pursuits.</p>
 
       <div class="signatures">
-        <div class="sign-block">PRINCIPAL</div>
-        <div class="sign-block">HEADMASTER</div>
+        <div class="sign-block"><strong>PRINCIPAL</strong><br>Mithila Teachers' Training College</div>
+        <div class="sign-block"><strong>HEADMASTER</strong><br><span id="certSignSchool">School Name</span></div>
       </div>
     </div>
   </div>
@@ -92,38 +97,22 @@
       const school = document.getElementById('sSchool').value;
       const photoFile = document.getElementById('sPhoto').files[0];
 
-      if (!name || !roll || !school || !photoFile) {
-        alert("Details bharein!");
-        return;
-      }
+      if (!name || !roll || !school || !photoFile) { alert("Details bharein!"); return; }
 
       document.getElementById('certName').innerText = name;
       document.getElementById('certRoll').innerText = roll;
       document.getElementById('certSchool').innerText = school;
+      document.getElementById('certSignSchool').innerText = school;
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        const base64Photo = e.target.result;
-
-        fetch("https://script.google.com/macros/s/AKfycbzhwAaDvGPq1z0_oyr8rwq-Avt-YMzoT-kglONi3-DR7x3XJRHxYFfU4Vv--DfxF87U/exec", {
-          method: "POST",
-          body: JSON.stringify({
-            name: name,
-            roll: roll,
-            school: school,
-            photo: base64Photo
-          })
-        });
-
-        document.getElementById('certPhoto').src = base64Photo;
+        document.getElementById('certPhoto').src = e.target.result;
         document.getElementById('formDiv').style.display = 'none';
         document.getElementById('certDiv').style.display = 'block';
         document.getElementById('printBtn').style.display = 'inline-block';
       };
-
       reader.readAsDataURL(photoFile);
     }
   </script>
-
 </body>
 </html>
