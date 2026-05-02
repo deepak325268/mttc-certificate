@@ -17,13 +17,13 @@
     }
     .form-container h2 { color: #1a237e; margin-bottom: 25px; font-family: 'Cinzel', serif; font-size: 22px; }
     .form-container input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
-    .form-container button { background: linear-gradient(135deg, #1a237e, #0d145c); color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; width: 100%; font-weight: bold; text-transform: uppercase; }
+    .form-container button { background: linear-gradient(135deg, #1a237e, #0d145c); color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; width: 100%; font-weight: bold; }
 
-    /* Certificate Layout */
+    /* Certificate Styling */
     .cert-container { 
       display: none; width: 900px; background: radial-gradient(circle, #ffffff, #fdfbf5); 
-      padding: 50px; border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520, 0 15px 35px rgba(0,0,0,0.2); 
-      margin: 20px auto; text-align: center; position: relative; box-sizing: border-box; overflow: hidden; 
+      padding: 50px; border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520; 
+      margin: 20px auto; text-align: center; position: relative; box-sizing: border-box; 
     }
     .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.06; z-index: 1; }
     .content-wrapper { position: relative; z-index: 2; }
@@ -38,24 +38,24 @@
     .signatures { display: flex; justify-content: space-between; margin-top: 80px; padding: 0 40px; }
     .sign-block { text-align: center; border-top: 2px dashed #1a237e; width: 240px; padding-top: 10px; font-size: 16px; color: #1a237e; }
     
-    #printBtn { margin: 30px auto; padding: 15px 30px; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; }
+    #printBtn { margin: 30px auto; padding: 15px 30px; background: #2e7d32; color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; }
 
-    /* PRINT PROBLEM SOLUTIONS */
+    /* SPECIAL PRINT LOGIC */
     @media print {
-      @page { size: A4 landscape; margin: 0; }
-      body { background-color: white; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+      @page { size: A4 landscape; margin: 5mm; }
+      body { background: white !important; margin: 0; padding: 0; }
       #printBtn, .form-container { display: none !important; }
       .cert-container { 
         display: block !important;
-        margin: 0 !important; 
-        border: 15px solid #1a237e !important; 
-        box-shadow: inset 0 0 0 5px #daa520 !important; 
-        width: 1000px !important; /* Printing width thodi jyada taaki edge na kate */
-        -webkit-print-color-adjust: exact !important; 
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border: 10px solid #1a237e !important;
+        box-shadow: inset 0 0 0 3px #daa520 !important;
+        -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
       }
-      .watermark { -webkit-print-color-adjust: exact !important; opacity: 0.1 !important; }
+      .watermark { opacity: 0.1 !important; }
     }
   </style>
 </head>
@@ -119,7 +119,7 @@
       const school = document.getElementById('sSchool').value;
       const photoFile = document.getElementById('sPhoto').files[0];
 
-      if (!name || !roll || !school || !photoFile) { alert("Details bharein!"); return; }
+      if (!name || !roll || !school || !photoFile) { alert("Sahi details bharein!"); return; }
 
       document.getElementById('certName').innerText = name;
       document.getElementById('certRoll').innerText = roll;
