@@ -108,13 +108,27 @@
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        document.getElementById('certPhoto').src = e.target.result;
-        document.getElementById('formDiv').style.display = 'none';
-        document.getElementById('certDiv').style.display = 'block';
-        document.getElementById('printBtn').style.display = 'inline-block';
-      };
-      reader.readAsDataURL(photoFile);
-    }
-  </script>
+  const base64Photo = e.target.result;
+
+  // 🔥 Google Sheet + Drive save
+  fetch("https://script.google.com/macros/s/AKfycbzhwAaDvGPq1z0_oyr8rwq-Avt-YMzoT-kglONi3-DR7x3XJRHxYFfU4Vv--DfxF87U/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      roll: roll,
+      school: school,
+      photo: base64Photo
+    })
+  })
+  .then(res => res.text())
+  .then(data => console.log("Saved:", data))
+  .catch(err => console.log("Error:", err));
+
+  // Certificate show (same)
+  document.getElementById('certPhoto').src = base64Photo;
+  document.getElementById('formDiv').style.display = 'none';
+  document.getElementById('certDiv').style.display = 'block';
+  document.getElementById('printBtn').style.display = 'inline-block';
+};
 </body>
 </html>
