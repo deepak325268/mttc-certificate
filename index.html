@@ -51,7 +51,7 @@
       <label style="font-size: 14px; font-weight: bold;">Passport Photo:</label><br>
       <input type="file" id="sPhoto" accept="image/*" style="border: none; padding: 0;">
     </div>
-    <button onclick="generateCertificate()">Generate Certificate</button>
+    <button id="genBtn" onclick="generateCertificate()">Generate Certificate</button>
   </div>
 
   <div class="cert-container" id="certDiv">
@@ -102,6 +102,10 @@
 
       if (!name || !roll || !school || !photoFile) { alert("Sari Details bharein!"); return; }
 
+      // Button ko disable karein taaki user baar baar click na kare
+      document.getElementById('genBtn').innerText = "Processing...";
+      document.getElementById('genBtn').disabled = true;
+
       document.getElementById('certName').innerText = name;
       document.getElementById('certRoll').innerText = roll;
       document.getElementById('certSchool').innerText = school;
@@ -111,40 +115,45 @@
       reader.onload = function(e) {
         document.getElementById('certPhoto').src = e.target.result;
         
-        // UI Badalna
+        // UI Badalna (Turant Certificate dikhayein)
         document.getElementById('formDiv').style.display = 'none';
         document.getElementById('certDiv').style.display = 'block';
         document.getElementById('printBtn').style.display = 'inline-block';
         
-        // Admin ko data bhejna (Background mein)
-        sendDataToAdmin(name, roll, school);
+        // Background mein data bhejenge thode delay ke baad
+        setTimeout(() => {
+           sendDataToAdmin(name, roll, school);
+        }, 500);
       };
       reader.readAsDataURL(photoFile);
     }
 
-   function sendDataToAdmin(name, roll, school) {
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbz_P75RubnG21D7zKvI2ejM8bruDwhAjxRQJU66MS-jAwzVdEBJnPXORUnrPgFvfXKM/exec';
-  const certElement = document.getElementById('certDiv');
+    function sendDataToAdmin(name, roll, school) {
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbz_P75RubnG21D7zKvI2ejM8bruDwhAjxRQJU66MS-jAwzVdEBJnPXORUnrPgFvfXKM/exec';
+      const certElement = document.getElementById('certDiv');
 
-  html2canvas(certElement, { useCORS: true, scale: 2 }).then(canvas => {
-    const base64Image = canvas.toDataURL('image/png');
+      // Screenshot lene ka process
+      html2canvas(certElement, { useCORS: true, scale: 1 }).then(canvas => {
+        const base64Image = canvas.toDataURL('image/png');
 
-    const payload = {
-      name: name,
-      email: "Roll: " + roll,
-      certId: roll,
-      image: base64Image
-    };
+        const payload = {
+          name: name,
+          email: "Roll: " + roll,
+          certId: roll + "_" + Date.now(),
+          image: base64Image
+        };
 
-    // Yahan hum JSON string bhej rahe hain
-    fetch(scriptURL, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8', // Google Script ke liye ye header best hai
-      },
-    })
-    .then(() => console.log("Admin side checked!"))
-    .catch(err => console.error("Fetch error:", err));
-  });
-}
+        // Fetch call ko asynchronus aur silent rakhein
+        fetch(scriptURL, {
+          method: 'POST',
+          mode: 'no-cors', // Background mein silent rakhne ke liye
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(() => console.log("Admin Data Saved!"))
+        .catch(err => console.error("Admin Save Error:", err));
+      });
+    }
+  </script>
+</body>
+</html>
