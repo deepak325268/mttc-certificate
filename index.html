@@ -1,158 +1,228 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <!-- html2canvas library for capturing data -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  
-  <style>
-    body { font-family: 'Arial', sans-serif; background-color: #d7dce0; text-align: center; margin: 0; padding: 10px; }
-    .form-container { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0px 10px 25px rgba(0,0,0,0.15); width: 95%; max-width: 400px; margin: 20px auto; border-top: 6px solid #1a237e; box-sizing: border-box; }
-    .form-container h2 { color: #1a237e; margin-bottom: 25px; font-family: 'Cinzel', serif; font-size: 22px; }
-    .form-container input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; transition: 0.3s; box-sizing: border-box; }
-    .form-container button { background: linear-gradient(135deg, #1a237e, #0d145c); color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; width: 100%; font-weight: bold; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-    
-    .cert-container { display: none; width: 900px; background: radial-gradient(circle, #ffffff, #fdfbf5); padding: 50px; border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520, 0 15px 35px rgba(0,0,0,0.2); margin: 20px auto; text-align: center; position: relative; box-sizing: border-box; overflow: hidden; }
-    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.06; z-index: 1; }
-    .content-wrapper { position: relative; z-index: 2; }
-    .header-layout { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
-    .college-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
-    .cert-maintitle { font-family: 'Cinzel', serif; color: #1a237e; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: 1.5px; }
-    .cert-subtitle { font-family: 'Arial', sans-serif; color: #b71c1c; font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #daa520; display: inline-block; padding-bottom: 5px; margin-top: 5px; letter-spacing: 2px; }
-    
-    .student-name { font-family: 'Lora', serif; font-size: 42px; color: #b71c1c; font-style: italic; font-weight: 700; margin: 10px 0; text-decoration: underline; text-decoration-color: #daa520; text-underline-offset: 12px; }
-    
-    .content-text { font-family: 'Lora', serif; font-size: 18px; line-height: 1.9; text-align: justify; margin-top: 40px; color: #333; }
-    .photo-box { width: 120px; height: 150px; border: 4px double #1a237e; background-color: #fff; padding: 6px; flex-shrink: 0; box-shadow: 3px 3px 10px rgba(0,0,0,0.15); }
-    .photo-box img { width: 100%; height: 100%; object-fit: cover; }
-    .signatures { display: flex; justify-content: space-between; margin-top: 80px; padding: 0 40px; }
-    .sign-block { text-align: center; border-top: 2px dashed #1a237e; width: 240px; padding-top: 10px; font-size: 16px; color: #1a237e; }
-    
-    #printBtn { margin-top: 30px; padding: 15px 30px; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; }
-    
-    @media print {
-      body { background-color: white; margin: 0; padding: 0; }
-      #printBtn, .form-container { display: none !important; }
-      .cert-container { border: 15px solid #1a237e !important; box-shadow: inset 0 0 0 5px #daa520 !important; margin: 0 !important; width: 100% !important; display: block !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    }
-  </style>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <style>
+    body { font-family: 'Arial', sans-serif; background-color: #d7dce0; text-align: center; margin: 0; padding: 10px; }
+
+    .form-container { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0px 10px 25px rgba(0,0,0,0.15); width: 95%; max-width: 400px; margin: 20px auto; border-top: 6px solid #1a237e; box-sizing: border-box; }
+    .form-container h2 { color: #1a237e; margin-bottom: 25px; font-family: 'Cinzel', serif; font-size: 22px; }
+
+    /* FIX 1: inputs ek ke neeche ek */
+    .form-container input[type="text"] { display: block; width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; transition: 0.3s; box-sizing: border-box; }
+    .form-container button { background: linear-gradient(135deg, #1a237e, #0d145c); color: white; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 17px; width: 100%; font-weight: bold; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+    
+    /* FIX 2: cert-container hidden — lekin position:absolute taaki content leak na ho */
+    .cert-container { display: none; width: 900px; background: radial-gradient(circle, #ffffff, #fdfbf5); padding: 50px; border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520, 0 15px 35px rgba(0,0,0,0.2); margin: 20px auto; text-align: center; position: relative; box-sizing: border-box; overflow: hidden; }
+    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.13; z-index: 1; }
+    .content-wrapper { position: relative; z-index: 2; }
+    .header-layout { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .college-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
+    .cert-maintitle { font-family: 'Cinzel', serif; color: #1a237e; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: 1.5px; }
+    .cert-subtitle { font-family: 'Arial', sans-serif; color: #b71c1c; font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #daa520; display: inline-block; padding-bottom: 5px; margin-top: 5px; letter-spacing: 2px; }
+    .student-name { font-family: 'Lora', serif; font-size: 42px; color: #b71c1c; font-style: italic; font-weight: 700; margin: 10px 0; text-decoration: underline; text-decoration-color: #daa520; text-underline-offset: 12px; }
+    .content-text { font-family: 'Lora', serif; font-size: 18px; line-height: 1.9; text-align: justify; margin-top: 40px; color: #333; }
+    .photo-box { width: 120px; height: 150px; border: 4px double #1a237e; background-color: #fff; padding: 6px; flex-shrink: 0; box-shadow: 3px 3px 10px rgba(0,0,0,0.15); }
+    .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+    .signatures { display: flex; justify-content: space-between; margin-top: 80px; padding: 0 40px; }
+    .sign-block { text-align: center; border-top: 2px dashed #1a237e; width: 240px; padding-top: 10px; font-size: 16px; color: #1a237e; }
+    
+    #printBtn { margin-top: 30px; padding: 15px 30px; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; }
+    #downloadBtn { margin-top: 30px; padding: 15px 30px; background: linear-gradient(135deg, #1565c0, #0d47a1); color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; width: 90%; max-width: 360px; }
+    #downloadBtn:disabled { opacity: 0.6; }
+    
+    @media print {
+      @page { size: A4 landscape; margin: 0; }
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+      #printBtn, .form-container { display: none !important; }
+      .cert-container {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important; left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 25px 40px !important;
+        box-sizing: border-box !important;
+        border: 12px solid #1a237e !important;
+        box-shadow: inset 0 0 0 4px #daa520 !important;
+        overflow: hidden !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      /* Spacing kam karo taaki signatures bhi aaye */
+      .header-layout { margin-bottom: 8px !important; }
+      .college-logo { width: 90px !important; margin-bottom: 8px !important; }
+      .cert-maintitle { font-size: 22px !important; margin-bottom: 4px !important; }
+      .cert-subtitle { font-size: 16px !important; margin-bottom: 8px !important; }
+      .content-text { font-size: 15px !important; line-height: 1.7 !important; margin-top: 15px !important; }
+      .student-name { font-size: 34px !important; margin: 6px 0 !important; }
+      .signatures { margin-top: 60px !important; padding-top: 20px !important; }
+      .watermark { width: 380px !important; }
+    }
+  </style>
 </head>
 <body>
 
-  <div class="form-container" id="formDiv">
-    <h2>Certificate Details</h2>
-    <input type="text" id="sName" placeholder="Pura Naam" required>
-    <input type="text" id="sRoll" placeholder="College Roll No." required>
-    <input type="text" id="sSchool" placeholder="Internship School Ka Naam" required>
-    <div style="text-align: left; margin: 15px 5%;">
-      <label style="font-size: 14px; font-weight: bold;">Passport Photo:</label><br>
-      <input type="file" id="sPhoto" accept="image/*" style="border: none; padding: 0;">
-    </div>
-    <button id="genBtn" onclick="generateCertificate()">Generate Certificate</button>
-  </div>
+  <div class="form-container" id="formDiv">
+    <h2>Certificate Details</h2>
+    <input type="text" id="sName" placeholder="Pura Naam" required>
+    <input type="text" id="sRoll" placeholder="College Roll No." required>
+    <input type="text" id="sSchool" placeholder="Internship School Ka Naam" required>
+    <div style="text-align: left; margin: 15px 5%;">
+      <label style="font-size: 14px; font-weight: bold;">Passport Photo:</label><br>
+      <input type="file" id="sPhoto" accept="image/*" style="border: none; padding: 0; width: auto;">
+    </div>
+    <button id="genBtn" onclick="generateCertificate()">Generate Certificate</button>
+  </div>
 
-  <div class="cert-container" id="certDiv">
-    <img src="https://i.ibb.co/nqYnPwxV/mithila-logo.png" class="watermark">
-    <div class="content-wrapper">
-      <div class="header-layout">
-        <img src="https://i.ibb.co/nqYnPwxV/mithila-logo.png" class="college-logo">
-        <div class="header-text">
-          <div class="cert-maintitle">MITHILA TEACHERS' TRAINING COLLEGE</div>
-          <div class="cert-subtitle">SCHOOL INTERNSHIP CERTIFICATE</div>
-          <div style="font-size: 16px; font-weight: bold; color: #555;">AT & P.O.: BASUARA, Dist. Madhubani - 847212 (Bihar).</div>
-          <div style="font-size: 13px; margin-top: 5px;">PERMANENTLY RECOGNIZED BY ERC, NCTE, BHUBANESWAR (Govt. of India).</div>
-          <div style="font-size: 13px;">PERMANENTLY AFFILIATED TO L. N. MITHILA UNIVERSITY, DARBHANGA.</div>
-          <div style="font-size: 13px;">D.El.Ed. Programme affiliated to Bihar School Examination Board, Patna.</div>
-        </div>
-      </div>
-      
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 40px; margin-top: 30px;">
-        <div style="flex: 1; margin-left: 140px; text-align: center;">
-          <p style="font-size: 18px; margin: 0; font-family: 'Lora', serif; font-style: italic;">This certificate is proudly presented to</p>
-          <div class="student-name" id="certName">Student Name</div>
-          <p style="font-size: 18px; margin: 0;"><strong>Roll No.: <span id="certRoll">Roll</span></strong></p>
-        </div>
-        <div class="photo-box"><img id="certPhoto" src=""></div>
-      </div>
+  <!-- FIX 3: cert-container HTML mein hai, images ke src seedhe set hain
+       display:none hone ke bawajood browser images load karta hai
+       kyunki src already HTML mein exist karta hai page load pe -->
+  <div class="cert-container" id="certDiv">
+    <img src="https://i.ibb.co/nqYnPwxV/mithila-logo.png" class="watermark">
+    <div class="content-wrapper">
+      <div class="header-layout">
+        <img src="https://i.ibb.co/nqYnPwxV/mithila-logo.png" class="college-logo">
+        <div class="header-text">
+          <div class="cert-maintitle">MITHILA TEACHERS' TRAINING COLLEGE</div>
+          <div class="cert-subtitle">SCHOOL INTERNSHIP CERTIFICATE</div>
+          <div style="font-size: 16px; font-weight: bold; color: #555;">AT & P.O.: BASUARA, Dist. Madhubani - 847212 (Bihar).</div>
+          <div style="font-size: 13px; margin-top: 5px;">PERMANENTLY RECOGNIZED BY ERC, NCTE, BHUBANESWAR (Govt. of India).</div>
+          <div style="font-size: 13px;">PERMANENTLY AFFILIATED TO L. N. MITHILA UNIVERSITY, DARBHANGA.</div>
+          <div style="font-size: 13px;">D.El.Ed. Programme affiliated to Bihar School Examination Board, Patna.</div>
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 40px; margin-top: 30px;">
+        <div style="flex: 1; margin-left: 140px; text-align: center;">
+          <p style="font-size: 22px; margin: 0; font-family: 'Lora', serif; font-style: italic;">This certificate is proudly presented to</p>
+          <div class="student-name" id="certName">Student Name</div>
+          <p style="font-size: 18px; margin: 0;"><strong>Roll No.: <span id="certRoll">Roll</span></strong></p>
+        </div>
+        <div class="photo-box"><img id="certPhoto" src=""></div>
+      </div>
 
-      <div class="content-text">
-        who is a student of the <strong>D.El.Ed. programme for the Session 2024-26</strong> and has successfully completed a 120-day School Internship Programme at <strong id="certSchool">School Name</strong> from <strong>December 2025 to April 2026</strong>. During the internship period, the student demonstrated strong dedication and actively contributed to various school activities. Furthermore, the student's behavior and overall performance were found to be highly satisfactory.
-      </div>
-      
-      <p style="margin-top: 40px; font-size: 20px; font-weight: bold; color: #1a237e;">We wish the student continued success in all future pursuits.</p>
+      <div class="content-text">
+        who is a student of the <strong>D.El.Ed. programme for the Session 2024-26</strong> and has successfully completed a 120-day School Internship Programme at <strong id="certSchool">School Name</strong> from <strong>December 2025 to April 2026</strong>. During the internship period, the student demonstrated strong dedication and actively contributed to various school activities. Furthermore, the student's behavior and overall performance were found to be highly satisfactory.
+      </div>
+      
+      <p style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #1a237e;">We wish the student continued success in all future pursuits.</p>
 
-      <div class="signatures">
-        <div class="sign-block"><strong>PRINCIPAL</strong><br>Mithila Teachers' Training College</div>
-        <div class="sign-block"><strong>HEADMASTER</strong><br><span id="certSignSchool">School Name</span></div>
-      </div>
-    </div>
-  </div>
-  
-  <button id="printBtn" style="display:none;" onclick="window.print()">Print / Save as PDF</button>
+      <div class="signatures">
+        <div class="sign-block"><strong>PRINCIPAL</strong><br>Mithila Teachers' Training College</div>
+        <div class="sign-block"><strong>HEADMASTER</strong><br><span id="certSignSchool">School Name</span></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Desktop: Print button | Mobile: Download Image button -->
+  <button id="printBtn" style="display:none;" onclick="handleSave()">🖨️ Print / Save as PDF</button>
+  <button id="downloadBtn" style="display:none;" onclick="downloadImage()">📥 Certificate Download Karo</button>
 
-  <script>
-    function generateCertificate() {
-      const name = document.getElementById('sName').value;
-      const roll = document.getElementById('sRoll').value;
-      const school = document.getElementById('sSchool').value;
-      const photoFile = document.getElementById('sPhoto').files[0];
+  <script>
+    // Mobile detect karo
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+    }
 
-      if (!name || !roll || !school || !photoFile) { alert("Details bharein!"); return; }
+    function generateCertificate() {
+      const name = document.getElementById('sName').value;
+      const roll = document.getElementById('sRoll').value;
+      const school = document.getElementById('sSchool').value;
+      const photoFile = document.getElementById('sPhoto').files[0];
 
-      // Button disable to prevent multiple saves
-      const genBtn = document.getElementById('genBtn');
-      genBtn.innerText = "Processing...";
-      genBtn.disabled = true;
+      if (!name || !roll || !school || !photoFile) { alert("Details bharein!"); return; }
 
-      document.getElementById('certName').innerText = name;
-      document.getElementById('certRoll').innerText = roll;
-      document.getElementById('certSchool').innerText = school;
-      document.getElementById('certSignSchool').innerText = school;
+      const genBtn = document.getElementById('genBtn');
+      genBtn.innerText = "Processing...";
+      genBtn.disabled = true;
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('certPhoto').src = e.target.result;
-        document.getElementById('formDiv').style.display = 'none';
-        document.getElementById('certDiv').style.display = 'block';
-        document.getElementById('printBtn').style.display = 'inline-block';
+      document.getElementById('certName').innerText = name;
+      document.getElementById('certRoll').innerText = roll;
+      document.getElementById('certSchool').innerText = school;
+      document.getElementById('certSignSchool').innerText = school;
 
-        // DATA SAVE LOGIC START
-        setTimeout(() => {
-          sendDataToAdmin(name, roll, school);
-        }, 800);
-      };
-      reader.readAsDataURL(photoFile);
-    }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('certPhoto').src = e.target.result;
+        document.getElementById('formDiv').style.display = 'none';
+        document.getElementById('certDiv').style.display = 'block';
 
-    function sendDataToAdmin(name, roll, school) {
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbz_P75RubnG21D7zKvI2ejM8bruDwhAjxRQJU66MS-jAwzVdEBJnPXORUnrPgFvfXKM/exec';
-      const certElement = document.getElementById('certDiv');
+        // Mobile mein download button, desktop mein print button
+        if (isMobile()) {
+          document.getElementById('downloadBtn').style.display = 'inline-block';
+        } else {
+          document.getElementById('printBtn').style.display = 'inline-block';
+        }
 
-      // Capture Certificate as Image
-      html2canvas(certElement, { useCORS: true, scale: 2 }).then(canvas => {
-        const base64Image = canvas.toDataURL('image/png');
+        setTimeout(() => {
+          sendDataToAdmin(name, roll, school);
+        }, 800);
+      };
+      reader.readAsDataURL(photoFile);
+    }
 
-        const payload = {
-          name: name,
-          email: "Roll: " + roll,
-          certId: roll + "_" + Date.now(),
-          image: base64Image
-        };
+    // Desktop: seedha print
+    function handleSave() {
+      window.print();
+    }
 
-        // Post data to Google Script
-        fetch(scriptURL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        .then(() => console.log("Data Saved Successfully!"))
-        .catch(err => console.error("Save Error:", err));
-      });
-    }
-  </script>
+    // Mobile: html2canvas se image banao aur download karo
+    function downloadImage() {
+      const btn = document.getElementById('downloadBtn');
+      btn.innerText = "Taiyar ho raha hai...";
+      btn.disabled = true;
+
+      const certElement = document.getElementById('certDiv');
+      html2canvas(certElement, { useCORS: true, scale: 2, allowTaint: true }).then(canvas => {
+        const imageData = canvas.toDataURL('image/png');
+
+        // Mobile download trick — anchor tag se download
+        const link = document.createElement('a');
+        link.href = imageData;
+        link.download = 'Internship_Certificate.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        btn.innerText = "📥 Certificate Download Karo";
+        btn.disabled = false;
+      }).catch(err => {
+        alert("Download mein error aaya, dobara try karo!");
+        btn.innerText = "📥 Certificate Download Karo";
+        btn.disabled = false;
+        console.error(err);
+      });
+    }
+
+    function sendDataToAdmin(name, roll, school) {
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbz_P75RubnG21D7zKvI2ejM8bruDwhAjxRQJU66MS-jAwzVdEBJnPXORUnrPgFvfXKM/exec';
+      const certElement = document.getElementById('certDiv');
+
+      html2canvas(certElement, { useCORS: true, scale: 2 }).then(canvas => {
+        const base64Image = canvas.toDataURL('image/png');
+        const payload = {
+          name: name,
+          email: "Roll: " + roll,
+          certId: roll + "_" + Date.now(),
+          image: base64Image
+        };
+        fetch(scriptURL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(() => console.log("Data Saved Successfully!"))
+        .catch(err => console.error("Save Error:", err));
+      });
+    }
+  </script>
 </body>
 </html>
