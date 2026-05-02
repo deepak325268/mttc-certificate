@@ -5,8 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <!-- html2canvas library for taking screenshot -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style>
     body { font-family: 'Arial', sans-serif; background-color: #d7dce0; text-align: center; margin: 0; padding: 10px; }
@@ -23,6 +21,7 @@
     .cert-maintitle { font-family: 'Cinzel', serif; color: #1a237e; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: 1.5px; }
     .cert-subtitle { font-family: 'Arial', sans-serif; color: #b71c1c; font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #daa520; display: inline-block; padding-bottom: 5px; margin-top: 5px; letter-spacing: 2px; }
     
+    /* FIX: Yahan offset ko 12px kar diya hai taki 'g', 'y' jaise letters touch na ho */
     .student-name { font-family: 'Lora', serif; font-size: 42px; color: #b71c1c; font-style: italic; font-weight: 700; margin: 10px 0; text-decoration: underline; text-decoration-color: #daa520; text-underline-offset: 12px; }
     
     .content-text { font-family: 'Lora', serif; font-size: 18px; line-height: 1.9; text-align: justify; margin-top: 40px; color: #333; }
@@ -33,22 +32,10 @@
     
     #printBtn { margin-top: 30px; padding: 15px 30px; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: white; border: none; cursor: pointer; font-size: 18px; border-radius: 8px; font-weight: bold; }
     
-    /* FIX: Yahan se print layout fix kiya gaya hai */
     @media print {
-      @page { size: A4 landscape; margin: 0; }
       body { background-color: white; margin: 0; padding: 0; }
       #printBtn, .form-container { display: none !important; }
-      .cert-container { 
-        display: block !important; 
-        width: 100% !important; 
-        height: 100vh;
-        margin: 0 !important; 
-        padding: 40px !important;
-        border: 15px solid #1a237e !important; 
-        box-shadow: none !important;
-        -webkit-print-color-adjust: exact; 
-        print-color-adjust: exact;
-      }
+      .cert-container { border: 15px solid #1a237e; box-shadow: inset 0 0 0 5px #daa520; margin: 0; -webkit-print-color-adjust: exact; }
     }
   </style>
 </head>
@@ -63,7 +50,7 @@
       <label style="font-size: 14px; font-weight: bold;">Passport Photo:</label><br>
       <input type="file" id="sPhoto" accept="image/*" style="border: none; padding: 0;">
     </div>
-    <button id="genBtn" onclick="generateCertificate()">Generate Certificate</button>
+    <button onclick="generateCertificate()">Generate Certificate</button>
   </div>
 
   <div class="cert-container" id="certDiv">
@@ -112,10 +99,7 @@
       const school = document.getElementById('sSchool').value;
       const photoFile = document.getElementById('sPhoto').files[0];
 
-      if (!name || !roll || !school || !photoFile) { alert("Sari Details bharein!"); return; }
-
-      document.getElementById('genBtn').innerText = "Processing...";
-      document.getElementById('genBtn').disabled = true;
+      if (!name || !roll || !school || !photoFile) { alert("Details bharein!"); return; }
 
       document.getElementById('certName').innerText = name;
       document.getElementById('certRoll').innerText = roll;
@@ -125,41 +109,11 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById('certPhoto').src = e.target.result;
-        
         document.getElementById('formDiv').style.display = 'none';
         document.getElementById('certDiv').style.display = 'block';
         document.getElementById('printBtn').style.display = 'inline-block';
-        
-        setTimeout(() => {
-           sendDataToAdmin(name, roll, school);
-        }, 500);
       };
       reader.readAsDataURL(photoFile);
-    }
-
-    function sendDataToAdmin(name, roll, school) {
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbz_P75RubnG21D7zKvI2ejM8bruDwhAjxRQJU66MS-jAwzVdEBJnPXORUnrPgFvfXKM/exec';
-      const certElement = document.getElementById('certDiv');
-
-      html2canvas(certElement, { useCORS: true, scale: 1 }).then(canvas => {
-        const base64Image = canvas.toDataURL('image/png');
-
-        const payload = {
-          name: name,
-          email: "Roll: " + roll,
-          certId: roll + "_" + Date.now(),
-          image: base64Image
-        };
-
-        fetch(scriptURL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        .then(() => console.log("Admin Data Saved!"))
-        .catch(err => console.error("Admin Save Error:", err));
-      });
     }
   </script>
 </body>
