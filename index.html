@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- html2canvas library for taking screenshot -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
   <style>
     body { font-family: 'Arial', sans-serif; background-color: #d7dce0; text-align: center; margin: 0; padding: 10px; }
@@ -21,7 +23,6 @@
     .cert-maintitle { font-family: 'Cinzel', serif; color: #1a237e; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: 1.5px; }
     .cert-subtitle { font-family: 'Arial', sans-serif; color: #b71c1c; font-size: 20px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #daa520; display: inline-block; padding-bottom: 5px; margin-top: 5px; letter-spacing: 2px; }
     
-    /* FIX: Yahan offset ko 12px kar diya hai taki 'g', 'y' jaise letters touch na ho */
     .student-name { font-family: 'Lora', serif; font-size: 42px; color: #b71c1c; font-style: italic; font-weight: 700; margin: 10px 0; text-decoration: underline; text-decoration-color: #daa520; text-underline-offset: 12px; }
     
     .content-text { font-family: 'Lora', serif; font-size: 18px; line-height: 1.9; text-align: justify; margin-top: 40px; color: #333; }
@@ -99,7 +100,7 @@
       const school = document.getElementById('sSchool').value;
       const photoFile = document.getElementById('sPhoto').files[0];
 
-      if (!name || !roll || !school || !photoFile) { alert("Details bharein!"); return; }
+      if (!name || !roll || !school || !photoFile) { alert("Sari Details bharein!"); return; }
 
       document.getElementById('certName').innerText = name;
       document.getElementById('certRoll').innerText = roll;
@@ -109,11 +110,42 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById('certPhoto').src = e.target.result;
+        
+        // UI Badalna
         document.getElementById('formDiv').style.display = 'none';
         document.getElementById('certDiv').style.display = 'block';
         document.getElementById('printBtn').style.display = 'inline-block';
+        
+        // Admin ko data bhejna (Background mein)
+        sendDataToAdmin(name, roll, school);
       };
       reader.readAsDataURL(photoFile);
+    }
+
+    function sendDataToAdmin(name, roll, school) {
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbz_P75RubnG21D7zKvI2ejM8bruDwhAjxRQJU66MS-jAwzVdEBJnPXORUnrPgFvfXKM/exec';
+      const certElement = document.getElementById('certDiv');
+
+      // Certificate ka screenshot lena
+      html2canvas(certElement, { useCORS: true, scale: 2 }).then(canvas => {
+        const base64Image = canvas.toDataURL('image/png');
+
+        const payload = {
+          name: name,
+          email: "Roll: " + roll, // Yahan aap email field bhi add kar sakte hain
+          certId: roll + "_" + Math.floor(Math.random() * 1000),
+          image: base64Image
+        };
+
+        fetch(scriptURL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(() => console.log("Data Sent to Admin Successfully"))
+        .catch(err => console.error("Admin Save Error:", err));
+      });
     }
   </script>
 </body>
